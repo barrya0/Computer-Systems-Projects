@@ -107,7 +107,7 @@ void basicMatrixMultiply(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& C,
 	}
 }
 
-//Function that performs matrix-matrix multiplication using SIMD(Singe Instruction, Multiple Data). Performs the same operation on multipledata points simultaneously
+//Function that performs matrix-matrix multiplication using SIMD(Single Instruction, Multiple Data). Performs the same operation on multipledata points simultaneously
 template <typename T>
 void SIMD(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& C, int start, int end){
 	for (int i = start; i < end; i++) {
