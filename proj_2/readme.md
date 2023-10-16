@@ -73,7 +73,7 @@ NOTE:
 
 (3) - Setting bit[1] high will trigger a size minimum on the matrixSize of atleast 104. Reason being, SIMD only makes sense to use past a certain matrixSize. In my case, I made the minimum 104. The given matrixSize will also be changed depending on if it is a multiple of 8 which is the 'simd_width' used in the program. This 'simd_width' corresponds to the 256-bit AVX registers in x86 architecture. All of this input handling allows for efficient vectorization and ensures data alignment when access data without wasting memory or computational resources.
 
-(4) - Setting bit[2] high will flag the "transpose" condition which then transposes one of the matrices. Matrix transposition improves the cache miss rate in a number of ways including, but not limited to: (1) improved spatial locality, (2) better memory access patterns, and (3) reduced temporal locality.
+(4) - Setting bit[2] high will flag the "transpose" condition which then transposes one of the matrices. Matrix transposition improves the cache miss rate in a number of ways including, but not limited to: (1) improved spatial locality, (2) better memory access patterns, and (3) Reduced temporal locality.
 
 ---
 #### Proof of Concept/Functionality
@@ -98,6 +98,6 @@ NOTE: Unfortunately, performing the matrix-matrix multiplication on the ```10000
 2) 500x500
 3) 1000x1000
 4) 5000x5000
-
+5) 10000x10000
 ---
-#### Realistically, there are 8 different experiment combinations for each matrix size. So 16 experiments to account for both data-types. Then 16 multiplied (4) for the number of different sizes. To limit the length and be concise, I will only display specific interesting cases especially on the ```1000x1000``` case. Please navigate to the "experiments" folder to find the data from the trials.
+#### Realistically, there are 8 different experiment combinations for each matrix size. So 16 experiments to account for both data-types. Then 16 multiplied (5) for the number of different sizes. To limit the length and be concise, I will only display specific interesting cases especially on the ```1000x1000``` case. Please navigate to the "experiments" folder to find the data from the trials.
