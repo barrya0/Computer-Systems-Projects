@@ -107,7 +107,7 @@ void basicMatrixMultiply(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& C,
 	}
 }
 
-//Function that performs matrix-matrix multiplication using SIMD(Single Instruction, Multiple Data). Performs the same operation on multipledata points simultaneously
+//Function that performs matrix-matrix multiplication using SIMD(Singe Instruction, Multiple Data). Performs the same operation on multipledata points simultaneously
 template <typename T>
 void SIMD(const Matrix<T>& A, const Matrix<T>& B, Matrix<T>& C, int start, int end){
 	for (int i = start; i < end; i++) {
@@ -167,19 +167,19 @@ void performMatrixMultiplication(
     bool native
 ) {
 
-	// Prints for debugging - not suitable for large matrices
+	// // Prints for debugging - not suitable for large matrices
 	// cout << "Matrices: " << endl;
 	// cout << "A" << endl;
-	// for (int i = 0; i < MA.getRows(); i++) {
-	// 	for (int j = 0; j < MA.getCols(); j++) {
-	// 		cout << MA(i, j) << " ";
+	// for (int i = 0; i < A.getRows(); i++) {
+	// 	for (int j = 0; j < A.getCols(); j++) {
+	// 		cout << A(i, j) << " ";
 	// 	}
 	// 	cout << endl;
 	// }
 	// cout << "B" << endl;
-	// for (int i = 0; i < MB.getRows(); i++) {
-	// 	for (int j = 0; j < MB.getCols(); j++) {
-	// 		cout << MB(i, j) << " ";
+	// for (int i = 0; i < B.getRows(); i++) {
+	// 	for (int j = 0; j < B.getCols(); j++) {
+	// 		cout << B(i, j) << " ";
 	// 	}
 	// 	cout << endl;
 	// }
@@ -234,12 +234,12 @@ void performMatrixMultiplication(
 
     cout << "Given:" << row << "x" << column << " This method took " << elapsed.count() << " nanoseconds" << endl;
 
-	// Prints for debugging
+	// // Prints for debugging
 	// //Print Result Matrix
 	// cout << "C - result" << endl;
-	// for (int i = 0; i < MC.getRows(); i++) {
-	// 	for (int j = 0; j < MC.getCols(); j++) {
-	// 		cout << MC(i, j) << " ";
+	// for (int i = 0; i < C.getRows(); i++) {
+	// 	for (int j = 0; j < C.getCols(); j++) {
+	// 		cout << C(i, j) << " ";
 	// 	}
 	// 	cout << endl;
 	// }
@@ -292,7 +292,8 @@ int main(int argc, char* argv[]) {
 
 						int matrixSize = (row / simd_width) * simd_width; // adjust matrix size
 						cout << "Adjusted size: " << matrixSize << endl;
-						row, column = matrixSize;
+						row = matrixSize;
+						column = matrixSize;
 					}
 				}
 			}
