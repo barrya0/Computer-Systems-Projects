@@ -101,3 +101,13 @@ NOTE: Unfortunately, performing the matrix-matrix multiplication on the ```10000
 5) 10000x10000
 ---
 #### Realistically, there are 8 different experiment combinations for each matrix size. So 16 experiments to account for both data-types. Then 16 multiplied (5) for the number of different sizes. To limit the length and be concise, I will only display specific interesting cases especially on the ```1000x1000``` case. Please navigate to the "experiments" folder to find the data from the trials.
+
+---
+
+### Conclusion
+
+After completing all of the trials and examining the performance differences, it became clear how important it is to utilize not just one protocol to optimize a program, but multiple in conjuction with one another. By leveraging the strengths of parallelism, efficient data processing, and cache-friendly memory access patterns, program performance improved by at least 1 order of magnitude in almost every trial. This is cemented even more so in this usecase where data can be very large and there are a multitude of factors to consider. 
+
+I found myself asking lots of questions. What libraries are in use? How is data created/accessed? Can this function be faster? How can I remove duplicate code? Constantly, there is an overarching theme of weeding out the overhead in the program and making it better as a whole.
+
+Overall, the experiments prove that combining all the methods yields the best performance.
