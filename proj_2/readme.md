@@ -34,6 +34,14 @@ g++ -mavx2 mmm.cpp -o exe
 
 The "-mavx2" dialogue lets the compiler know to generate code that leverages AVX2 instructions and is critical for enabling and optimizing the use of AVX2 instructions. Neglecting the flag may lead to errors in program execution.
 
+If you encounter the error 'undefined reference to 'pthread_create', simply add the '-pthread' flag in compilation.
+
+Example:
+
+```
+g++ -mavx2 -o exe mmm.cpp -pthread
+```
+
 After compiling, the program requires several inputs, which, at capacity, can be mapped to something along the lines of this:
 
 ```
