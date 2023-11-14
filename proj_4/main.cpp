@@ -43,7 +43,7 @@ void writeFiles(std::vector<uint32_t>& compressed_data,                     std:
     // Output the compressed encoded data to a file
     std::ofstream encodedFile("encoded_data.txt");
     if (encodedFile.is_open()) {
-        for (int code : encoded_data) {
+        for (int code : compressed_data) {
             encodedFile << code << "\n";
         }
         encodedFile.close();
@@ -88,34 +88,42 @@ void Query_dict(std::string query, std::vector<int>& indices){
         }
     }
 }
-void Query_SIMD(std::string query, std::vector<int>& indices){
-    int val;
+
+void Query_SIMD(std::string query, std::vector<int>& indices) {
+    int val; // Initialize a variable to hold the value associated with the query
+
+    // Check if the query exists in the global dictionary
     auto it = globalDictionary.find(query);
-    if (it != globalDictionary.end()){
-        val = it->second;
+    if (it != globalDictionary.end()) {
+        val = it->second; // If found, retrieve its associated value
+    } else {
+        val = -1; // If not found, assign a sentinel value (-1) to 'val'
     }
-    else {
-        val = -1;
-    }
-    if(val != -1){
-        const int* dataPtr = encoded_data.data();
-        const int step = 8;  // Adjust according to your SIMD register width
 
-        __m256i targetVec = _mm256_set1_epi32(val);
+    if (val != -1) { // Proceed only if the query value exists in the dictionary
+        const int* dataPtr = encoded_data.data(); // Pointer to the encoded data
+        const int step = 8; // Define the step size for SIMD operations (adjust according to SIMD register width)
 
+        __m256i targetVec = _mm256_set1_epi32(val); // Create a SIMD vector with the query value
+
+        // Iterate through the encoded data in steps of 'step' for SIMD processing
         for (int i = 0; i < encoded_data.size(); i += step) {
-            __m256i dataVec = _mm256_loadu_si256((__m256i*)&dataPtr[i]);
-            __m256i result = _mm256_cmpeq_epi32(dataVec, targetVec);
+            __m256i dataVec = _mm256_loadu_si256((__m256i*)&dataPtr[i]); // Load a vector of integers from encoded data
 
-            int mask = _mm256_movemask_ps(_mm256_castsi256_ps(result));
+            __m256i result = _mm256_cmpeq_epi32(dataVec, targetVec); // Compare the vectors for equality
+
+            int mask = _mm256_movemask_ps(_mm256_castsi256_ps(result)); // Extract the match mask
+
+            // Process the mask to identify matching indices within the SIMD vector
             for (int j = 0; j < step; ++j) {
-                if ((mask >> j) & 1) {
-                    indices.push_back(i + j);
+                if ((mask >> j) & 1) { // Check each bit in the mask
+                    indices.push_back(i + j); // Add the index where the match is found to the indices vector
                 }
             }
         }
     }
 }
+
 void queryDataItem(const std::vector<std::string>& raw_data, std::string query, std::vector<int>& indices){
     
     // auto start = std::chrono::high_resolution_clock::now();
@@ -173,20 +181,30 @@ void prefix_dict(std::string prefix, std::vector<int>& matchingPrefix){
         }
     }
 }
-
+// Function to find indices of matching integer values using SIMD intrinsics for AVX2
 void prefix_SIMD(std::string prefix, std::vector<int>& matchingPrefix){
-    std::vector<int> matchingValues;
+    for (const auto& pair : globalDictionary) {
+        if (pair.first.rfind(prefix, 0) == 0) {
+            __m256i prefixInt = _mm256_set1_epi32(pair.second);
 
-    for (const auto& entry : globalDictionary) {
-        if (entry.first.compare(0, prefix.length(), prefix) == 0) {
-            matchingValues.push_back(entry.second);
-        }
-    }
+            for (size_t i = 0; i < encoded_data.size(); i += 8) {
+                if (i + 8 <= encoded_data.size()) {
+                    // Load 8 integers from the encoded data points vector
+                    __m256i dataPoints = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(&encoded_data[i]));
 
-    for (size_t i = 0; i < encoded_data.size(); ++i) {
-        for (size_t j = 0; j < matchingValues.size(); ++j) {
-            if (encoded_data[i] == matchingValues[j]) {
-                matchingPrefix.push_back(i);
+                    // Compare for equality with the value from the dictionary
+                    __m256i matchResult = _mm256_cmpeq_epi32(dataPoints, prefixInt);
+
+                    // Get a mask of matching elements
+                    int matchMask = _mm256_movemask_ps(_mm256_castsi256_ps(matchResult));
+
+                    // If there are matches, process the mask and update indices
+                    while (matchMask != 0) {
+                        int tz = __builtin_ctz(matchMask); // Count trailing zeros
+                        matchingPrefix.push_back(i + tz);
+                        matchMask &= ~(1 << tz);
+                    }
+                }
             }
         }
     }
@@ -222,19 +240,19 @@ void prefixSearch(const std::vector<std::string>& raw_data, std::string prefix, 
 
 // Function to get the encoded data column and dictionary
 void encode_data(const std::vector<std::string>& raw_data, int start, int end, std::unordered_map<std::string, int>& localDict, std::vector<int>& localEncodedData) {
-    int code = 0;
+    int code = 0; // Initialize a code for new entries in the dictionary
     for (int i = start; i < end; ++i) {
         const std::string& str = raw_data[i];
         
-        auto it = localDict.find(str);
+        auto it = localDict.find(str); // Check if string already in dict.
         
-        if (it == localDict.end()) {
-            localDict[str] = code;
+        if (it == localDict.end()) { // If the string is not in the dict.
+            localDict[str] = code;  // Add to dict.
             localEncodedData.push_back(code);
             code++;
         }
         else{
-            localEncodedData.push_back(it->second);
+            localEncodedData.push_back(it->second); // If the string is found, use its corresponding code and add it to the encoded data
         }
     }
 }
@@ -275,7 +293,7 @@ void callThreads(const std::vector<std::string>& raw_data){
     } 
 
     std::vector<std::thread> threads;
-    std::vector<std::unordered_map<std::string, int>> localDictionaries(num_threads);
+    std::vector<std::unordered_map<std::string, int>> localDictionaries(num_threads); // Store local dictionary encodings
     std::vector<std::vector<int>> localEncodedDataList(num_threads); // Store local encoded data
     const int data_size = raw_data.size();
     const int segment_size = data_size / num_threads;
@@ -283,14 +301,18 @@ void callThreads(const std::vector<std::string>& raw_data){
     //measure time to encode under variable # of threads
     auto start = std::chrono::high_resolution_clock::now();
 
+    // This loop divides the work among multiple threads to encode data concurrently
     for (int i = 0; i < num_threads; ++i) {
-        int start = i * segment_size;
-        int end = (i == num_threads - 1) ? data_size : (i + 1) * segment_size;
+        int start = i * segment_size; // starting index for current thread's segment
+        int end = (i == num_threads - 1) ? data_size : (i + 1) * segment_size; // ending index
+        
+        // Create threads and assign the 'encode_data' function to each thread, passing references to necessary data
         threads.emplace_back(encode_data, std::ref(raw_data), start, end, std::ref(localDictionaries[i]), std::ref(localEncodedDataList[i]));
     }
-
+    
+    // Wait for all the threads to finish their work before continuing
     for (auto &t : threads) {
-        t.join();
+        t.join(); // Synchronize the main thread with each of the created threads
     }
 
     mergeLocalDictionaries(localDictionaries);
@@ -303,12 +325,15 @@ void callThreads(const std::vector<std::string>& raw_data){
 }
 // Function for compressing data
 std::vector<uint32_t> compressData(const std::vector<int>& data) {
-    std::vector<uint32_t> converted_data(data.begin(), data.end());
-    std::vector<uint32_t> compressed_data(converted_data.size() * 2); // Estimate the size
+    // Use reinterpret_cast to work directly with the data without changing types
+    const uint32_t* uintData = reinterpret_cast<const uint32_t*>(data.data());
+    size_t dataLength = data.size();
+
+    std::vector<uint32_t> compressed_data(data.size() * 2); // Estimate the size
 
     size_t nvalue = 0;
     FastPForLib::VariableByte varByte;
-    varByte.encodeArray(converted_data.data(), converted_data.size(), compressed_data.data(), nvalue);
+    varByte.encodeArray(uintData, dataLength, compressed_data.data(), nvalue);
 
     compressed_data.resize(nvalue);
     return compressed_data;
@@ -366,8 +391,11 @@ int main(int argc, char *argv[]) {
     prefix = query.substr(0, 3);
     std::cout << query << std::endl;
     std::cout << prefix << std::endl;
+    
     std::vector<int> indices;
     queryDataItem(raw_data, query, indices);
+
+    // For testing purposes, not recommended when dealing with large text files
     if (!indices.size()) {
         std::cout << "No matches found for '" << query << "'." << std::endl;
     } else {
@@ -377,10 +405,13 @@ int main(int argc, char *argv[]) {
         }
         std::cout << std::endl;
     }
+    //---//
 
     std::vector<int> matchingPrefix;
     prefixSearch(raw_data, prefix, matchingPrefix);
-        if (!matchingPrefix.size()) {
+    
+    //Also for testing purposes
+    if (!matchingPrefix.size()) {
         std::cout << "No matches found for '" << prefix << "'." << std::endl;
     } else {
         std::cout << "Matches found for " << prefix << " Indices: ";
@@ -389,6 +420,7 @@ int main(int argc, char *argv[]) {
         }
         std::cout << std::endl;
     }
+    //---//
 
     return 0;
 }
