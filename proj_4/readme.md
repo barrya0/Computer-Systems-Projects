@@ -99,7 +99,7 @@ Bar graph comparing the single item search performance on 2 encoded column files
 (ii)
 <p align="center"> <img src="imgs/image-3.png" alt="drawing" width="75%"/> </p>
 
-For larger column files, the time for searching is much greater however, the behavior seen in the experiments is still very much the same as compared to the smaller column files. You will notice SIMD instructions combined with dictionary encoding is the fastest method to search for an item. Again, the baseline method is very costly, especially for the 500 MB file, ColumnLarger.
+For larger column files, the time for searching is much greater. Regardless, the behavior seen in the experiments is still very much the same as compared to the smaller column files. You will notice SIMD instructions combined with dictionary encoding is the fastest method to search for an item. Again, the baseline method is very costly, especially for the 500 MB file, ColumnLarger.
 
 #### (3) Prefix Search Speed Performance
 
