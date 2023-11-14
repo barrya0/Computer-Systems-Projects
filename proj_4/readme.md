@@ -57,7 +57,7 @@ When running the program currently, there are some small things to consider:
 
 Example Output:
 
-<p align="center"> <img src="poc_img.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/poc_img.png" alt="drawing" width="75%"/> </p>
 
 As you can see, when running some column file, the code will request a valid number of threads, perform the encoding and print the duration in microseconds. After having written the encoded data into the respective files, the random query is printed and the prefix is based on that query currently. This can also be changed in the future. Finally, the program outputs the Query and Prefix method used and the duration for each.
 
@@ -80,36 +80,36 @@ Unfortunately, I was unable to run tests on any files larger than this as my pro
 #### (1) Encoding Speed under Variable Threads
 
 (i)
-<p align="center"> <img src="image.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image.png" alt="drawing" width="75%"/> </p>
 
 This graph shows a comparison between the encoding time for ColumnSmall and ColumnMid in microseconds over a thread number from 1 to 12. Naturally, the encoding time for a larger text file is longer. Interestingly, it is very easy to see there's a point where increasing the number of threads becomes detrimental to the encoding performance as too many threads for some 'x' amount of data will introduce overhead that will overshadow the benefits of concurrent operations. For ColumnSmall, the optimal number of threads seems to be around 5 or 6 and for ColumnLarge it is undoubtedly 6 threads. While this is notable, it's also important to understand this behavior will vary with different implementations of multi-threading.
 
 (ii)
-<p align="center"> <img src="image-1.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image-1.png" alt="drawing" width="75%"/> </p>
 
 This is a graph of the 2 larger column files, ColumnLarge & ColumnLarger. While there aren't much differences between the thread numbers for the ColumnLarge file, there is an observed drop in encoding speed of ColumnLarger data from around 22 seconds to 12 from thread count 1 to 2. From that points forward, there is a steady decrease in encoding time as the thread count increases up until thread # 12 where there is a slight jump. I appreciate this behavior especially as it resembles the inverted exponential function $e^{-x}$.
 
 #### (2) Query Search Speed Performance
 
 (i)
-<p align="center"> <img src="image-2.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image-2.png" alt="drawing" width="75%"/> </p>
 
 Bar graph comparing the single item search performance on 2 encoded column files from ColumnSmall and ColumnLarger respectively. The behavior is the same for both files. The baseline method of searching is very undesirable and costly whereas utilizing dictionary encoding, the time can be cut down drastically and furthermore with the inclusion of SIMD instructions. 
 
 (ii)
-<p align="center"> <img src="image-3.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image-3.png" alt="drawing" width="75%"/> </p>
 
 For larger column files, the time for searching is much greater however, the behavior seen in the experiments is still very much the same as compared to the smaller column files. You will notice SIMD instructions combined with dictionary encoding is the fastest method to search for an item. Again, the baseline method is very costly, especially for the 500 MB file, ColumnLarger.
 
 #### (3) Prefix Search Speed Performance
 
 (i)
-<p align="center"> <img src="image-4.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image-4.png" alt="drawing" width="75%"/> </p>
 
 In examining the prefix search speed of the encoded column files, I noticed some curious and unexpected behaviors. Initially, as I thought, the addition of SIMD instructions made the prefix search faster but only when compared to dictionary search alone. In this experiment the baseline search seems to be the preferred method at least in terms of my program operation. The performance difference between the dictionary search and baseline search is too drastic to ignore. This may indicate a problem with my code or just a quirk of my implementation.
 
 (ii)
-<p align="center"> <img src="image-5.png" alt="drawing" width="75%"/> </p>
+<p align="center"> <img src="imgs/image-5.png" alt="drawing" width="75%"/> </p>
 
 Again, there is the similar pattern of SIMD instructions being faster than dictionary search alone, but the baseline outpacing both. This revealed to me that my method of prefix searching may be flawed. However, intuitively this makes sense to me as in the baseline prefix search, while the program is parsing through a lot of raw data, it is doing so directly and not going through the trouble of looking for specific keys and then finally looking through the encoded column file. I would not be surprised though if this behavior was not present in much larger files where iterating through a raw data vector is undesirable.
 
