@@ -9,7 +9,7 @@ Encoding: given a file consisting of raw column data, program carries out dictio
 (2)
 Query: Currently, the query is just a random string that I generate. Making this into something the user inputs is fairly trivial and I will update in the future. 
 
-(i) Upon recieving a query, my code checks whether the item exists, if it exists, returns the indices of all the matching entries in the column.
+(i) Upon receiving a query, my code checks whether the item exists, if it exists, returns the indices of all the matching entries in the column.
 
 (ii) Given a prefix, searches and returns all the unique matching data items and their indices. My implementation further supports the use of SIMD instructions to speed up the search/scan.
 
