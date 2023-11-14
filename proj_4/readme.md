@@ -87,7 +87,7 @@ This graph shows a comparison between the encoding time for ColumnSmall and Colu
 (ii)
 <p align="center"> <img src="imgs/image-1.png" alt="drawing" width="75%"/> </p>
 
-This is a graph of the 2 larger column files, ColumnLarge & ColumnLarger. While there aren't much differences between the thread numbers for the ColumnLarge file, there is an observed drop in encoding time of ColumnLarger data from around 22 seconds to 12 from thread count 1 to 2. From that points forward, there is a steady decrease in encoding time as the thread count increases up until thread # 12 where there is a slight jump. I appreciate this behavior especially as it resembles the inverted exponential function $e^{-x}$.
+This is a graph of the 2 larger column files, ColumnLarge & ColumnLarger. While there aren't many differences between the encoding speeds for the ColumnLarge file, there is an observed drop in encoding time of the ColumnLarger data from around 22 seconds to 12 seconds with a thread count increase from 1 to 2. From that point forward, there is a steady decrease in encoding time as the thread count increases up until thread # 12 where there is a slight jump. I appreciate this behavior especially as it resembles the inverted exponential function $e^{-x}$.
 
 #### (2) Query Search Speed Performance
 
