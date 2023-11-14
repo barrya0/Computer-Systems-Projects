@@ -75,7 +75,7 @@ Column Files used for testing:
 
 (iv) ColumnLarger - Size 500 MB appx.
 
-Unfortunately, I was unable to run tests on any files larger than this as my program would get killed by my compiler every time. However, I think this data is still very relevant and truthful to the performance differences when using dicitionary encoding.
+Unfortunately, I was unable to run tests on any files larger than this as my program would get killed by the compiler for using too much memory every time. However, I think this data is still very relevant and truthful to the performance differences when using dictionary encoding.
 
 #### (1) Encoding Speed under Variable Threads
 
