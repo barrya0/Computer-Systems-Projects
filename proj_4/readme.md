@@ -94,7 +94,7 @@ This is a graph of the 2 larger column files, ColumnLarge & ColumnLarger. While 
 (i)
 <p align="center"> <img src="imgs/image-2.png" alt="drawing" width="75%"/> </p>
 
-Bar graph comparing the single item search performance on 2 encoded column files from ColumnSmall and ColumnLarger respectively. The behavior is the same for both files. The baseline method of searching is very undesirable and costly whereas utilizing dictionary encoding, the time can be cut down drastically and furthermore with the inclusion of SIMD instructions. 
+Bar graph comparing the single item search performance on 2 encoded column files from ColumnSmall and ColumnMid respectively. The behavior is the same for both files. The baseline method of searching is very undesirable and costly whereas utilizing dictionary encoding, the time can be cut down drastically and furthermore with the inclusion of SIMD instructions. 
 
 (ii)
 <p align="center"> <img src="imgs/image-3.png" alt="drawing" width="75%"/> </p>
