@@ -1,0 +1,24 @@
+﻿  Compiling CUDA source file GaussBlur.cu...
+  
+  C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\x64\Debug\GaussBlur.cu.obj "C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\GaussBlur.cu" 
+C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\stb_image.h(4262): warning #550-D: variable "old_limit" was set but never used
+       unsigned int cur, limit, old_limit;
+                                ^
+  
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+  
+C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\stb_image.h(5184): warning #550-D: variable "idata_limit_old" was set but never used
+                   stbi__uint32 idata_limit_old = idata_limit;
+                                ^
+  
+C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\stb_image.h(6971): warning #550-D: variable "out_size" was set but never used
+          int out_size = 0;
+              ^
+  
+C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\stb_image.h(6972): warning #550-D: variable "delays_size" was set but never used
+          int delays_size = 0;
+              ^
+  
+  GaussBlur.cu
+  tmpxft_0000ebd8_00000000-7_GaussBlur.cudafe1.cpp
+  GaussianBlur_ACSYS_projfinal_p1.vcxproj -> C:\Users\abdou\source\repos\GaussianBlur_ACSYS_projfinal_p1\x64\Debug\GaussianBlur_ACSYS_projfinal_p1.exe
