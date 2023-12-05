@@ -165,9 +165,9 @@ int main(int argc, char** argv) {
 	unsigned char* hPix = NULL;
 	unsigned char* dPix = NULL;
 
-	const char* image = "C:/Users/abdou/source/repos/GaussianBlur_ACSYS_projfinal_p1/images/3200x2400.png";
-	const char* hostResultPath = "C:/Users/abdou/source/repos/GaussianBlur_ACSYS_projfinal_p1/result/hBlur3200x2400.png";
-	const char* deviceResultPath = "C:/Users/abdou/source/repos/GaussianBlur_ACSYS_projfinal_p1/result/dBlur3200x2400.png";
+	const char* image = "pathToYourImage";
+	const char* hostResultPath = "resultPath";
+	const char* deviceResultPath = "resultPath";
 
 	//populate data from pgm onto host
 	//loadPGM(image, &width, &height, &hPix);
